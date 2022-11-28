@@ -2,12 +2,13 @@ package com.turno.pacientes.controller;
 
 import com.turno.pacientes.dto.PacienteDto;
 import com.turno.pacientes.entity.Paciente;
-import com.turno.pacientes.service.pacienteService;
+import com.turno.pacientes.service.PacienteService;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("HTTP://localhost:4200")
 public class PacienteController {
 
     @Autowired
-    private pacienteService pacienteserv; //el controlador solo inyecta el servicio
+    private PacienteService pacienteserv; //el controlador solo inyecta el servicio
     //trae todos los registros de la bbdd
 
     @GetMapping("/vertodos")
@@ -43,7 +45,7 @@ public class PacienteController {
     }
 
     //borar paciente
-    @DeleteMapping("/borrar{id}")
+    @DeleteMapping("/borrar/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") int id) {
         if (!pacienteserv.existById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -57,7 +59,7 @@ public class PacienteController {
     public ResponseEntity<?> create(@RequestBody PacienteDto dtopaciente) {  //uso dto para llevar y traer datos a traves de la api
         if (StringUtils.isBlank(dtopaciente.getNombre())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else if (pacienteserv.existByNombre(dtopaciente.getNombre())) { //si ya existe mando el bad request para que no hayann 2 con el mismo nombre
+        } else if (pacienteserv.existsByNombre(dtopaciente.getNombre())) { //si ya existe mando el bad request para que no hayann 2 con el mismo nombre
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         Paciente paciente = new Paciente(dtopaciente.getNombre(),
@@ -71,14 +73,14 @@ public class PacienteController {
     }
 
     //editar paciente
-    @PutMapping("/editar{id}")
+    @PutMapping("/editar/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody PacienteDto dtopaciente) { //para editar un registro que ya esta en nndd lo identifico con id y le paso la nueva info por dto
         if (!pacienteserv.existById(id)) { //si no existe por id
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else if (StringUtils.isBlank(dtopaciente.getNombre())) {  //si el nombre del paciente esta vacio
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } //si obtengo el nombre del paciente pero el id no coincide, hago bad request
-        else if (pacienteserv.existByNombre(dtopaciente.getNombre()) && pacienteserv.getByNombre(dtopaciente.getNombre()).get().getId() != id) {
+        else if (pacienteserv.existsByNombre(dtopaciente.getNombre()) && pacienteserv.getByNombre(dtopaciente.getNombre()).get().getId() != id) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         Paciente paciente = pacienteserv.getById(id).get();

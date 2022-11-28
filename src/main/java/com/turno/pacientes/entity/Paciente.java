@@ -1,5 +1,6 @@
 package com.turno.pacientes.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +14,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+
 @Entity
 @Table(name = "pacientes")
 @Getter
 @Setter
 @NoArgsConstructor //lombok para ahorrar insertar codigo de constructor sin argumentos
-public class Paciente {
+public class Paciente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,17 +43,19 @@ public class Paciente {
     private String telefono;
 
     @Column(name = "especialista")
-    private String especialista;
-
+        private String especialista;
+    
+    
     @Column(name = "obraSocial")
     private String obraSocial;
 
     @Column(name = "tieneTurno")
     private boolean tieneTurno;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "turno")
+    @Column(name = "turno", updatable = false, nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date turno;
+   
 
     public Paciente(String nombre, String apellido, String genero, int edad, String telefono, String especialista, String obraSocial, boolean tieneTurno, Date turno) {
         this.nombre = nombre;

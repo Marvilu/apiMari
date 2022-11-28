@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 
-public class pacienteService {
+public class PacienteService {
     @Autowired
     IPacienteRepository pacienterepo;
     
@@ -38,13 +38,13 @@ public class pacienteService {
         pacienterepo.deleteById(id);
     }
     public boolean existById(int id){
-        return pacienterepo.existById(id);
+        return pacienterepo.existsById(id);
     }
-     public boolean existByNombre(String nombre){
-         return pacienterepo.existByNombre(nombre);
+     public boolean existsByNombre(String nombre){
+         return pacienterepo.existsByNombre(nombre);
      }
-     public boolean existByEspecialista(String especialista){
-         return pacienterepo.existByNombre(especialista);
+     public boolean existsByEspecialista(String especialista){
+         return pacienterepo.existsByNombre(especialista);
      }
     
     
