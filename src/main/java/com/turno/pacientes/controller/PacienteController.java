@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("HTTP://localhost:4200")
+//@CrossOrigin("HTTP://localhost:4200")
 public class PacienteController {
 
     @Autowired
